@@ -1219,3 +1219,98 @@ img {
   }
 }
 
+
+/* ===== Mobile Layout Fix ===== */
+@media (max-width: 768px) {
+
+  * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .portal-wrapper,
+  .dashboard-layout,
+  .portal-main {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+  }
+
+  .stats-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+
+/* ===== Better Mobile UI ===== */
+@media (max-width: 768px) {
+
+  .portal-header{
+    padding:10px 14px !important;
+  }
+
+  .portal-main{
+    padding:10px !important;
+  }
+
+  .glass-card{
+    padding:16px !important;
+    border-radius:12px;
+  }
+
+  h1{
+    font-size:1.6rem !important;
+  }
+
+  h2{
+    font-size:1.3rem !important;
+  }
+
+  h3{
+    font-size:1.1rem !important;
+  }
+
+  label,
+  p{
+    font-size:.9rem !important;
+  }
+
+  .stat-card{
+    padding:14px !important;
+  }
+
+  .stat-value{
+    font-size:1.8rem !important;
+  }
+
+  .form-input,
+  input,
+  select,
+  textarea{
+    height:44px;
+    font-size:15px;
+  }
+
+  button{
+    height:44px;
+    font-size:15px;
+  }
+
+  .modal-content{
+    width:95%;
+    max-height:90vh;
+  }
+}
+
