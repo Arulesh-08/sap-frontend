@@ -1508,3 +1508,44 @@ img {
     height: 320px;
   }
 }
+
+/* ---------- Compact table so all columns fit without scrolling ---------- */
+.custom-table th,
+.custom-table td {
+  padding: 8px 10px;
+  font-size: 0.78rem;
+}
+
+.category-chip {
+  font-size: 0.68rem;
+  padding: 3px 8px;
+}
+
+.title-cell {
+  max-width: 140px;
+}
+
+.verified-seal-badge {
+  padding: 4px 8px;
+  gap: 5px;
+}
+
+.v-status {
+  font-size: 0.62rem;
+}
+
+.v-code {
+  font-size: 0.58rem;
+}
+
+.status-pill {
+  font-size: 0.68rem;
+  padding: 3px 7px;
+}
+
+@media (min-width: 1400px) {
+  .custom-table {
+    table-layout: fixed;
+    width: 100%;
+  }
+}
