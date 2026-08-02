@@ -1031,3 +1031,37 @@ button, input, select, textarea {
   max-width: 100%;
   box-sizing: border-box;
 }
+
+/* ---------- Stronger mobile width lock ---------- */
+html, body, #root {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.portal-wrapper,
+.portal-main,
+.dashboard-layout,
+.stats-grid,
+.glass-card,
+.stat-card {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .portal-main {
+    padding: 12px;
+  }
+
+  .stat-card {
+    padding: 12px 14px;
+  }
+
+  select.form-input,
+  .form-input {
+    width: 100%;
+    font-size: 0.8rem;
+  }
+}
