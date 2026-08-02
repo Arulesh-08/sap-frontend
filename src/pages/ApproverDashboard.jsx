@@ -83,7 +83,7 @@ export default function ApproverDashboard() {
   const fetchAnalytics = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/points/analytics", {
+      const res = await fetch("https://sap-backend-1.onrender.com/api/points/analytics", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
