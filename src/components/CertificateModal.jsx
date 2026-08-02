@@ -3,7 +3,7 @@ import React from "react";
 export default function CertificateModal({ activity, onClose }) {
   if (!activity || !activity.proofUrl) return null;
 
-  const fileUrl = `http://localhost:5000/uploads/certificates/${activity.proofUrl}`;
+  const fileUrl = `https://sap-backend-1.onrender.com/uploads/certificates/${activity.proofUrl}`;
   const isPdf = activity.proofUrl.toLowerCase().endsWith(".pdf");
 
   return (
