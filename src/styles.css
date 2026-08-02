@@ -1314,3 +1314,197 @@ img {
   }
 }
 
+
+/* ================= COMPREHENSIVE RESPONSIVE PASS ================= */
+
+/* Tablet / small laptop (max 1200px) */
+@media (max-width: 1200px) {
+  .portal-main {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablet (max 768px) */
+@media (max-width: 768px) {
+  .portal-header {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    gap: 10px;
+  }
+
+  .welcome-banner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px;
+  }
+
+  .btn-primary-pdf {
+    width: 100%;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .custom-table {
+    min-width: 700px;
+  }
+
+  .action-button-group {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .btn-approve,
+  .btn-reject {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+/* Phone (max 480px) */
+@media (max-width: 480px) {
+  .portal-header {
+    padding: 10px 12px;
+  }
+
+  .brand-title {
+    font-size: 0.95rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.68rem;
+  }
+
+  .user-badge {
+    display: none; /* hide on very small screens to save space; name still visible via logout context */
+  }
+
+  .portal-main {
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .welcome-banner h2 {
+    font-size: 1.1rem;
+  }
+
+  .welcome-banner p {
+    font-size: 0.78rem;
+  }
+
+  .role-tag-pill {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .stat-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+  }
+
+  .stat-label {
+    font-size: 0.62rem;
+  }
+
+  .stat-value {
+    font-size: 1.05rem;
+  }
+
+  .glass-card {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .card-header h3 {
+    font-size: 1rem;
+  }
+
+  .form-input {
+    padding: 8px 10px;
+    font-size: 0.82rem;
+  }
+
+  .btn-submit,
+  .btn-auth-submit {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .file-upload-box {
+    padding: 10px;
+  }
+
+  .file-hint {
+    font-size: 0.7rem;
+  }
+
+  .category-tabs {
+    gap: 6px;
+  }
+
+  .tab-btn {
+    font-size: 0.72rem;
+    padding: 5px 10px;
+  }
+
+  .inline-number-input {
+    width: 55px;
+    font-size: 0.75rem;
+  }
+
+  .inline-text-input {
+    width: 90px;
+    font-size: 0.72rem;
+  }
+
+  .btn-approve,
+  .btn-reject {
+    font-size: 0.7rem;
+    padding: 6px 8px;
+  }
+
+  .auth-card-wrapper {
+    padding: 18px;
+  }
+
+  .auth-title {
+    font-size: 1.15rem;
+  }
+
+  .modal-content {
+    border-radius: 10px;
+  }
+
+  .pdf-container {
+    height: 320px;
+  }
+}
