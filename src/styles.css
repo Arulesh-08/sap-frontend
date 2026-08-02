@@ -978,3 +978,36 @@ body {
     font-size: 0.7rem;
   }
 }
+
+/* ---------- Mobile: form inputs and buttons ---------- */
+@media (max-width: 480px) {
+  .form-input {
+    padding: 9px 12px;
+    font-size: 0.85rem;
+  }
+
+  .file-upload-box {
+    padding: 12px;
+  }
+
+  .file-hint {
+    font-size: 0.75rem;
+  }
+
+  .btn-submit {
+    padding: 11px;
+    font-size: 0.88rem;
+  }
+
+  .activity-form {
+    gap: 12px;
+  }
+
+  .form-group {
+    gap: 4px;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+  }
+}
