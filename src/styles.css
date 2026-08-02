@@ -1065,3 +1065,157 @@ html, body, #root {
     font-size: 0.8rem;
   }
 }
+
+/* ==========================
+   Responsive Fix
+========================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+.portal-wrapper,
+.portal-main,
+.dashboard-layout,
+.glass-card,
+.stat-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Responsive Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+  .portal-main {
+    padding: 16px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .portal-main {
+    padding: 12px !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .glass-card,
+  .stat-card {
+    width: 100% !important;
+    padding: 14px !important;
+  }
+
+  .form-input,
+  select.form-input,
+  input,
+  button,
+  textarea {
+    width: 100% !important;
+    font-size: 15px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.1rem; }
+}
+
+/* Small Phones */
+@media (max-width: 480px) {
+
+  .portal-main {
+    padding: 10px !important;
+  }
+
+  .glass-card,
+  .stat-card {
+    padding: 12px !important;
+    border-radius: 12px;
+  }
+
+  .form-input,
+  input,
+  select,
+  button,
+  textarea {
+    font-size: 14px;
+  }
+
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.15rem; }
+}
+
+
+/* Responsive Fix */
+html, body, #root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .portal-main {
+    padding: 12px !important;
+  }
+
+  .glass-card,
+  .stat-card {
+    width: 100% !important;
+    padding: 14px !important;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    width: 100% !important;
+  }
+}
+
