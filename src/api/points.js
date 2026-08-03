@@ -5,6 +5,18 @@ function authHeaders() {
   return { Authorization: `Bearer ${token}` };
 }
 
+// Category -> Type -> Tier -> points, straight from the backend's pointStructure.js.
+// This is the single source of truth for the cascading dropdown UI, so the frontend
+// can never drift out of sync with what the server will actually accept/compute.
+export async function getCategories() {
+  const res = await fetch(`${BASE_URL}/points/categories`, {
+    headers: authHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Failed to load categories");
+  return result;
+}
+
 export async function submitActivity(formData) {
   const res = await fetch(`${BASE_URL}/points/submit`, {
     method: "POST",

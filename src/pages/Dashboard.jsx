@@ -1,20 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { submitActivity, getMyPoints } from "../api/points.js";
+import { submitActivity, getMyPoints, getCategories } from "../api/points.js";
 import { downloadReport } from "../api/report.js";
 import KecLogo from "../components/KecLogo.jsx";
 import CertificateModal from "../components/CertificateModal.jsx";
-
-const CATEGORIES = [
-  "1. Paper/Poster/Project Presentation",
-  "2. Techno Managerial Events / Hackathon / Ideathon",
-  "3. Sports & Games",
-  "4. Membership & Social Activities",
-  "5. Leadership/Organizing Events",
-  "6. Non-Credit Value-Added Course/IPT",
-  "7. Project to paper/Patent/Product Copyright",
-  "8. GATE/CAT/Govt. Exams / Placement",
-];
 
 function calculateSAPMark(points) {
   if (points >= 150) return 5;
@@ -25,15 +14,20 @@ function calculateSAPMark(points) {
   return 0;
 }
 
+const EMPTY_FORM = { category: "", type: "", tier: "", title: "" };
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
-  const [form, setForm] = useState({
-    category: CATEGORIES[0],
-    title: "",
-    pointsClaimed: "",
-  });
+  // Category -> Type -> Tier -> points, fetched from the backend. This drives the
+  // cascading dropdowns below and is the ONLY source of point values in the UI —
+  // the server computes the real points on submit, this is just for the live preview.
+  const [structure, setStructure] = useState(null);
+  const [structureLoading, setStructureLoading] = useState(true);
+  const [structureError, setStructureError] = useState("");
+
+  const [form, setForm] = useState(EMPTY_FORM);
   const [certificate, setCertificate] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -66,7 +60,21 @@ export default function Dashboard() {
 
     setUser(parsedUser);
     loadPoints();
+    loadCategories();
   }, []);
+
+  const loadCategories = async () => {
+    setStructureLoading(true);
+    setStructureError("");
+    try {
+      const result = await getCategories();
+      setStructure(result);
+    } catch (err) {
+      setStructureError(err.message);
+    } finally {
+      setStructureLoading(false);
+    }
+  };
 
   const loadPoints = async () => {
     setLoading(true);
@@ -81,27 +89,63 @@ export default function Dashboard() {
     }
   };
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  // Category list, in the exact order the backend defines them.
+  const categoryOptions = structure ? Object.keys(structure) : [];
+  const typeOptions =
+    structure && form.category ? Object.keys(structure[form.category].types) : [];
+  const tierOptions =
+    structure && form.category && form.type
+      ? Object.keys(structure[form.category].types[form.type])
+      : [];
+  const previewPoints =
+    structure && form.category && form.type && form.tier
+      ? structure[form.category].types[form.type][form.tier]
+      : null;
+  const categoryMax = structure && form.category ? structure[form.category].max : null;
+
+  const handleCategoryChange = (e) => {
+    // Changing the category invalidates whatever type/tier was picked, so clear both.
+    setForm({ ...form, category: e.target.value, type: "", tier: "" });
+  };
+
+  const handleTypeChange = (e) => {
+    setForm({ ...form, type: e.target.value, tier: "" });
+  };
+
+  const handleTierChange = (e) => {
+    setForm({ ...form, tier: e.target.value });
+  };
+
+  const handleTitleChange = (e) => {
+    setForm({ ...form, title: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError("");
     setSubmitSuccess("");
+
+    if (!form.category || !form.type || !form.tier) {
+      setSubmitError("Please select a Category, Type, and Tier.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const data = new FormData();
       data.append("category", form.category);
+      data.append("type", form.type);
+      data.append("tier", form.tier);
       data.append("title", form.title);
-      data.append("pointsClaimed", form.pointsClaimed);
+      // No pointsClaimed field — the server looks up the exact point value from
+      // category/type/tier itself, so nothing here can be tampered with client-side.
       if (certificate) data.append("certificate", certificate);
 
       await submitActivity(data);
 
       setSubmitSuccess("Activity certificate submitted for 3-tier approval (Mentor → Class Advisor → HOD)!");
-      setForm({ category: CATEGORIES[0], title: "", pointsClaimed: "" });
+      setForm(EMPTY_FORM);
       setCertificate(null);
       e.target.reset();
 
@@ -136,6 +180,11 @@ export default function Dashboard() {
   const activities = record.activities || [];
   const totalApproved = record.totalPointsApproved || 0;
   const sapMark = calculateSAPMark(totalApproved);
+
+  // Tabs are built from whatever categories actually appear in the student's own
+  // submissions, not from the point-structure keys — that way older entries (from
+  // before a category was renamed/removed) never disappear from the filter list.
+  const activityCategories = [...new Set(activities.map((a) => a.category))];
 
   const filteredActivities =
     selectedCategoryFilter === "All"
@@ -211,67 +260,122 @@ export default function Dashboard() {
               <span className="card-subtitle">Attach certificate (JPG, PNG, or PDF)</span>
             </div>
 
+            {structureError && (
+              <div className="alert alert-error">
+                Could not load activity categories: {structureError}{" "}
+                <button type="button" className="btn-view-proof" onClick={loadCategories}>
+                  Retry
+                </button>
+              </div>
+            )}
             {submitError && <div className="alert alert-error">{submitError}</div>}
             {submitSuccess && <div className="alert alert-success">{submitSuccess}</div>}
 
-            <form onSubmit={handleSubmit} className="activity-form">
-              <div className="form-group">
-                <label>Category</label>
-                <select name="category" value={form.category} onChange={handleChange} required className="form-input">
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
+            {structureLoading ? (
+              <p className="loading-state">Loading activity categories...</p>
+            ) : (
+              <form onSubmit={handleSubmit} className="activity-form">
+                <div className="form-group">
+                  <label>Category{categoryMax !== null && ` (Max ${categoryMax} pts)`}</label>
+                  <select
+                    name="category"
+                    value={form.category}
+                    onChange={handleCategoryChange}
+                    required
+                    className="form-input"
+                  >
+                    <option value="" disabled>
+                      Select a category
                     </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>Activity Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="e.g. IEEE Conference Paper / Hackathon 1st Prize"
-                  value={form.title}
-                  onChange={handleChange}
-                  required
-                  className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Points Claimed</label>
-                <input
-                  type="number"
-                  name="pointsClaimed"
-                  placeholder="e.g. 50"
-                  value={form.pointsClaimed}
-                  onChange={handleChange}
-                  required
-                  min="1"
-                  className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Certificate File (Photo or PDF)</label>
-                <div className="file-upload-box">
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.pdf"
-                    onChange={(e) => setCertificate(e.target.files[0])}
-                    id="certificate-file"
-                  />
-                  <span className="file-hint">
-                    {certificate ? `Selected: ${certificate.name}` : "Upload JPG, PNG, or PDF Certificate"}
-                  </span>
+                    {categoryOptions.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              </div>
 
-              <button type="submit" disabled={submitting} className="btn-submit">
-                {submitting ? "Submitting..." : "Submit for Mentor Review →"}
-              </button>
-            </form>
+                <div className="form-group">
+                  <label>Type</label>
+                  <select
+                    name="type"
+                    value={form.type}
+                    onChange={handleTypeChange}
+                    required
+                    disabled={!form.category}
+                    className="form-input"
+                  >
+                    <option value="" disabled>
+                      {form.category ? "Select a type" : "Select a category first"}
+                    </option>
+                    {typeOptions.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Tier</label>
+                  <select
+                    name="tier"
+                    value={form.tier}
+                    onChange={handleTierChange}
+                    required
+                    disabled={!form.type}
+                    className="form-input"
+                  >
+                    <option value="" disabled>
+                      {form.type ? "Select a tier" : "Select a type first"}
+                    </option>
+                    {tierOptions.map((tier) => (
+                      <option key={tier} value={tier}>
+                        {tier}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {previewPoints !== null && (
+                  <div className="alert alert-success" style={{ marginBottom: "1rem" }}>
+                    This combination is worth <strong>{previewPoints} points</strong> (subject to approval).
+                  </div>
+                )}
+
+                <div className="form-group">
+                  <label>Activity Title</label>
+                  <input
+                    type="text"
+                    name="title"
+                    placeholder="e.g. IEEE Conference Paper / Hackathon 1st Prize"
+                    value={form.title}
+                    onChange={handleTitleChange}
+                    required
+                    className="form-input"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Certificate File (Photo or PDF)</label>
+                  <div className="file-upload-box">
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.pdf"
+                      onChange={(e) => setCertificate(e.target.files[0])}
+                      id="certificate-file"
+                    />
+                    <span className="file-hint">
+                      {certificate ? `Selected: ${certificate.name}` : "Upload JPG, PNG, or PDF Certificate"}
+                    </span>
+                  </div>
+                </div>
+
+                <button type="submit" disabled={submitting} className="btn-submit">
+                  {submitting ? "Submitting..." : "Submit for Mentor Review →"}
+                </button>
+              </form>
+            )}
           </section>
 
           {/* Activities List Section */}
@@ -291,7 +395,7 @@ export default function Dashboard() {
               >
                 All Categories ({activities.length})
               </button>
-              {CATEGORIES.map((cat) => {
+              {activityCategories.map((cat) => {
                 const count = activities.filter((a) => a.category === cat).length;
                 return (
                   <button
