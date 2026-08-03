@@ -43,7 +43,7 @@ export default function Register() {
         <div className="auth-header">
           <KecLogo size={56} />
           <h2 className="auth-title">Create SAP Portal Account</h2>
-          <p className="auth-subtitle">Register as Student, Mentor, Class Advisor, or HOD</p>
+          <p className="auth-subtitle">Register as a Student. Faculty accounts are created by the Admin.</p>
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
@@ -94,11 +94,8 @@ export default function Register() {
 
             <div className="form-group">
               <label>Select Role</label>
-              <select name="role" value={form.role} onChange={handleChange} className="form-input">
+              <select name="role" value={form.role} onChange={handleChange} className="form-input" disabled>
                 <option value="student">Student</option>
-                <option value="mentor">Faculty Mentor</option>
-                <option value="advisor">Class Advisor</option>
-                <option value="hod">Head of Department (HOD)</option>
               </select>
             </div>
           </div>
