@@ -135,6 +135,33 @@ export default function ApproverDashboard() {
     }
   };
 
+  const handleRevoke = async (item) => {
+    setActionError("");
+    const confirmed = window.confirm(
+      `Revoke verification for ${item.studentName}'s "${item.title}"? This will remove their approved points.`
+    );
+    if (!confirmed) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(
+        `https://sap-backend-1.onrender.com/api/points/${item.studentId}/activity/${item.activityId}/revoke`,
+        {
+          method: "PATCH",
+          headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ remarks: "Revoked after re-review" }),
+        }
+      );
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.message || "Revoke failed");
+
+      fetchActivities(statusTab);
+      fetchAnalytics();
+    } catch (err) {
+      setActionError(err.message);
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -393,6 +420,13 @@ export default function ApproverDashboard() {
                                 <span className="v-status">OFFICIALLY VERIFIED</span>
                                 <span className="v-code">{item.verificationCode || "KEC-VERIFIED"}</span>
                               </div>
+                              <button
+                                className="btn-reject"
+                                style={{ marginLeft: 8 }}
+                                onClick={() => handleRevoke(item)}
+                              >
+                                Revoke
+                              </button>
                             </div>
                           ) : (
                             <span className="status-pill status-pending">
