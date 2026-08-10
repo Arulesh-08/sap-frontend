@@ -1549,3 +1549,16 @@ img {
     width: 100%;
   }
 }
+
+/* Inline text-button used in ForgotPassword "← Start over" */
+.btn-link {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+.btn-link:hover { opacity: 1; }

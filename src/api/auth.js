@@ -11,6 +11,28 @@ export async function registerUser(data) {
   return result;
 }
 
+export async function verifyReset(data) {
+  const res = await fetch(`${BASE_URL}/auth/verify-reset`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Verification failed");
+  return result;
+}
+
+export async function resetPassword(data) {
+  const res = await fetch(`${BASE_URL}/auth/reset-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Reset failed");
+  return result;
+}
+
 export async function loginUser(data) {
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: "POST",
