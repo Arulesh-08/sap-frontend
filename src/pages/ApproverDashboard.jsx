@@ -256,6 +256,15 @@ export default function ApproverDashboard() {
           <button className="btn-change-password" onClick={() => setShowChangePassword(true)}>
             🔑 Change Password
           </button>
+          {(user.role === "advisor" || user.role === "hod") && (
+            <button
+              className="btn-download-summary"
+              onClick={handleDownloadExcel}
+              title="Download Student SAP Summary as Excel"
+            >
+              📥 Download Summary Sheet
+            </button>
+          )}
           <button className="btn-logout" onClick={handleLogout}>
             Logout
           </button>

@@ -1594,6 +1594,27 @@ img {
   transition: all 0.2s ease;
 }
 
+.btn-download-summary {
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #1a7a4c, #145c38);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(26,122,76,0.18);
+  white-space: nowrap;
+}
+
+.btn-download-summary:hover {
+  background: linear-gradient(135deg, #145c38, #0f4429);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(26,122,76,0.28);
+}
+
 .btn-change-password:hover {
   background: rgba(255, 255, 255, 0.15);
   color: #FFFFFF;
