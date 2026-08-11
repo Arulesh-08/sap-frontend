@@ -11,6 +11,20 @@ export async function registerUser(data) {
   return result;
 }
 
+export async function changePassword(data, token) {
+  const res = await fetch(`${BASE_URL}/auth/change-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Password change failed");
+  return result;
+}
+
 export async function verifyReset(data) {
   const res = await fetch(`${BASE_URL}/auth/verify-reset`, {
     method: "POST",
