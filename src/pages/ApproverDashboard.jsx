@@ -265,17 +265,6 @@ export default function ApproverDashboard() {
       {/* Main Ultra-Wide Content */}
       <main className="portal-main">
         {/* Banner */}
-        <section className="welcome-banner approver-banner">
-          <div>
-            <div className="role-tag-pill">Stage {stageNumber}: {roleTitle} Approval Console</div>
-            <h2>Sequential 3-Tier Verification: 1st Mentor → 2nd Class Advisor → 3rd HOD</h2>
-            <p>Order Enforced: Review attached certificates (Photo or PDF) and verify points for your stage.</p>
-          </div>
-        </section>
-
-        {actionError && <div className="alert alert-error">{actionError}</div>}
-        {actionSuccess && <div className="alert alert-success">{actionSuccess}</div>}
-
         {/* Main Tab Switcher */}
         <div className="tab-switcher" style={{ margin: "0 0 16px 0" }}>
           <button
@@ -294,7 +283,18 @@ export default function ApproverDashboard() {
           )}
         </div>
 
-        {/* Analytics & Counts Row */}
+        <section className="welcome-banner approver-banner">
+          <div>
+            <div className="role-tag-pill">Stage {stageNumber}: {roleTitle} Approval Console</div>
+            <h2>Sequential 3-Tier Verification: 1st Mentor → 2nd Class Advisor → 3rd HOD</h2>
+            <p>Order Enforced: Review attached certificates (Photo or PDF) and verify points for your stage.</p>
+          </div>
+        </section>
+
+        {actionError && <div className="alert alert-error">{actionError}</div>}
+        {actionSuccess && <div className="alert alert-success">{actionSuccess}</div>}
+
+{/* Analytics & Counts Row */}
         <section className="stats-grid">
           <div className="stat-card gold">
             <div className="stat-icon">📊</div>
