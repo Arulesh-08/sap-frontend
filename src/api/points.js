@@ -55,6 +55,32 @@ export async function getAllActivities() {
   return result;
 }
 
+export async function getStudentSummary() {
+  const res = await fetch(`${BASE_URL}/points/student-summary`, {
+    headers: authHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Failed to load student summary");
+  return result;
+}
+
+export async function downloadAdvisorSummaryPdf() {
+  const res = await fetch(`${BASE_URL.replace("/api", "")}/api/report/summary/advisor`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.message || "PDF download failed");
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `SAP_Advisor_Summary_${Date.now()}.pdf`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export async function reviewActivity(studentId, activityId, payload) {
   const res = await fetch(`${BASE_URL}/points/${studentId}/activity/${activityId}`, {
     method: "PATCH",

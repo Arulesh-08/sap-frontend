@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPendingActivities, getAllActivities, reviewActivity } from "../api/points.js";
+import { getPendingActivities, getAllActivities, reviewActivity, getStudentSummary, downloadAdvisorSummaryPdf } from "../api/points.js";
 import KecLogo from "../components/KecLogo.jsx";
 import CertificateModal from "../components/CertificateModal.jsx";
 import ChangePasswordModal from "../components/ChangePasswordModal.jsx";
@@ -39,6 +39,12 @@ export default function ApproverDashboard() {
 
   const [activeModalActivity, setActiveModalActivity] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
+
+  const [mainTab, setMainTab] = useState("approvals"); // "approvals" | "summary"
+  const [summary, setSummary] = useState(null);
+  const [summaryLoading, setSummaryLoading] = useState(false);
+  const [summaryError, setSummaryError] = useState("");
+  const [pdfDownloading, setPdfDownloading] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -94,6 +100,55 @@ export default function ApproverDashboard() {
       }
     } catch (e) {
       console.error(e);
+    }
+  };
+
+  const fetchSummary = async () => {
+    setSummaryLoading(true);
+    setSummaryError("");
+    try {
+      const data = await getStudentSummary();
+      setSummary(data);
+    } catch (err) {
+      setSummaryError(err.message);
+    } finally {
+      setSummaryLoading(false);
+    }
+  };
+
+  const handleDownloadExcel = () => {
+    if (!summary) return;
+    const { categories, students } = summary;
+    const SHORT = ["Paper Pres.", "Techno Mgr.", "Sports", "Membership",
+      "Leadership", "Value-Added", "Project/Patent", "GATE/CAT"];
+    const header = ["S.No", "Roll No.", "Name", ...SHORT, "Total"];
+    const rows = students.map((s, idx) => [
+      idx + 1,
+      s.rollNumber,
+      s.name,
+      ...categories.map((cat) => s.categoryCounts[cat] || 0),
+      s.total,
+    ]);
+    const csvContent = [header, ...rows]
+      .map((row) => row.map((cell) => `"${cell}"`).join(","))
+      .join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `SAP_Advisor_Summary_${Date.now()}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadPdf = async () => {
+    setPdfDownloading(true);
+    try {
+      await downloadAdvisorSummaryPdf();
+    } catch (err) {
+      setActionError(err.message);
+    } finally {
+      setPdfDownloading(false);
     }
   };
 
@@ -221,6 +276,24 @@ export default function ApproverDashboard() {
         {actionError && <div className="alert alert-error">{actionError}</div>}
         {actionSuccess && <div className="alert alert-success">{actionSuccess}</div>}
 
+        {/* Main Tab Switcher */}
+        <div className="tab-switcher" style={{ margin: "0 0 16px 0" }}>
+          <button
+            className={`switch-btn ${mainTab === "approvals" ? "active" : ""}`}
+            onClick={() => setMainTab("approvals")}
+          >
+            📋 Approval Queue
+          </button>
+          {(user.role === "advisor" || user.role === "hod") && (
+            <button
+              className={`switch-btn ${mainTab === "summary" ? "active" : ""}`}
+              onClick={() => { setMainTab("summary"); fetchSummary(); }}
+            >
+              📊 Student Summary Table
+            </button>
+          )}
+        </div>
+
         {/* Analytics & Counts Row */}
         <section className="stats-grid">
           <div className="stat-card gold">
@@ -255,6 +328,9 @@ export default function ApproverDashboard() {
             </div>
           </div>
         </section>
+
+        {/* ===== APPROVALS TAB ===== */}
+        {mainTab === "approvals" && (<>
 
         {/* Table Container Card */}
         <section className="glass-card full-width-card">
@@ -449,6 +525,74 @@ export default function ApproverDashboard() {
         </section>
       </main>
 
+        </>)}
+
+        {/* ===== SUMMARY TABLE TAB ===== */}
+        {mainTab === "summary" && (
+          <section className="glass-card full-width-card">
+            <div className="card-header flex-between flex-wrap">
+              <div>
+                <h3>Student SAP Summary — Advisor-Approved Submission Counts</h3>
+                <span className="card-subtitle">Shows count of submissions approved by advisor or above, per category</span>
+              </div>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button className="btn-primary-pdf" onClick={handleDownloadExcel} disabled={!summary}>
+                  📥 Download Excel (.csv)
+                </button>
+                <button className="btn-primary-pdf" onClick={handleDownloadPdf} disabled={pdfDownloading}>
+                  {pdfDownloading ? "Generating..." : "📄 Download PDF"}
+                </button>
+              </div>
+            </div>
+
+            {summaryLoading && <p className="loading-state">Loading student summary...</p>}
+            {summaryError && <div className="alert alert-error">{summaryError}</div>}
+
+            {summary && !summaryLoading && (
+              <div className="table-responsive">
+                <table className="custom-table" style={{ fontSize: "12px" }}>
+                  <thead>
+                    <tr>
+                      <th>S.No</th>
+                      <th>Roll No.</th>
+                      <th>Name</th>
+                      <th>Paper Pres.</th>
+                      <th>Techno Mgr.</th>
+                      <th>Sports</th>
+                      <th>Membership</th>
+                      <th>Leadership</th>
+                      <th>Value-Added</th>
+                      <th>Project/Patent</th>
+                      <th>GATE/CAT</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {summary.students.map((s, idx) => (
+                      <tr key={s.studentId}>
+                        <td>{idx + 1}</td>
+                        <td><strong>{s.rollNumber}</strong></td>
+                        <td>{s.name}</td>
+                        {summary.categories.map((cat) => (
+                          <td key={cat} style={{ textAlign: "center" }}>
+                            {s.categoryCounts[cat] > 0 ? (
+                              <strong style={{ color: "#1a7a4c" }}>{s.categoryCounts[cat]}</strong>
+                            ) : (
+                              <span style={{ color: "#aaa" }}>0</span>
+                            )}
+                          </td>
+                        ))}
+                        <td style={{ textAlign: "center" }}>
+                          <strong style={{ color: s.total > 0 ? "#1a3c34" : "#aaa" }}>{s.total}</strong>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        )}
       {/* Certificate Modal */}
       {activeModalActivity && (
         <CertificateModal
