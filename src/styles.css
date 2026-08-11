@@ -1562,3 +1562,40 @@ img {
   opacity: 0.8;
 }
 .btn-link:hover { opacity: 1; }
+
+.form-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.forgot-password-link {
+  color: var(--primary-emerald);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.forgot-password-link:hover {
+  opacity: 0.8;
+}
+
+.btn-change-password {
+  background: rgba(255, 255, 255, 0.05);
+  color: #E2E8F0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-change-password:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+}
+

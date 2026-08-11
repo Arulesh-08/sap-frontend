@@ -4,6 +4,7 @@ import { submitActivity, getMyPoints, getCategories } from "../api/points.js";
 import { downloadReport } from "../api/report.js";
 import KecLogo from "../components/KecLogo.jsx";
 import CertificateModal from "../components/CertificateModal.jsx";
+import ChangePasswordModal from "../components/ChangePasswordModal.jsx";
 
 function calculateSAPMark(points) {
   if (points >= 150) return 5;
@@ -42,6 +43,7 @@ export default function Dashboard() {
 
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("All");
   const [activeModalActivity, setActiveModalActivity] = useState(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -203,6 +205,9 @@ export default function Dashboard() {
             <span className="user-name">{user.name}</span>
             <span className="user-detail">Roll: {user.rollNumber || "N/A"} • Dept: {user.department}</span>
           </div>
+          <button className="btn-change-password" onClick={() => setShowChangePassword(true)}>
+            🔑 Change Password
+          </button>
           <button className="btn-logout" onClick={handleLogout}>
             Logout
           </button>
@@ -499,6 +504,13 @@ export default function Dashboard() {
         <CertificateModal
           activity={activeModalActivity}
           onClose={() => setActiveModalActivity(null)}
+        />
+      )}
+
+      {/* Change Password Modal */}
+      {showChangePassword && (
+        <ChangePasswordModal
+          onClose={() => setShowChangePassword(false)}
         />
       )}
     </div>

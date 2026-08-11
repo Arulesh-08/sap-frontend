@@ -23,12 +23,17 @@ export default function ForgotPassword() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const isStaff = email.toLowerCase().trim().endsWith("@kongu.ac.in");
+
   const handleVerify = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const result = await verifyReset({ rollNumber: rollNumber.trim(), email: email.trim() });
+      const result = await verifyReset({
+        rollNumber: isStaff ? "" : rollNumber.trim(),
+        email: email.trim(),
+      });
       setResetSession({ token: result.token, userId: result.userId });
       setStep(2);
     } catch (err) {
@@ -83,28 +88,30 @@ export default function ForgotPassword() {
             {error && <div className="alert alert-error">{error}</div>}
 
             <div className="form-group">
-              <label>Roll Number</label>
-              <input
-                type="text"
-                placeholder="e.g. 22IT011"
-                value={rollNumber}
-                onChange={(e) => setRollNumber(e.target.value)}
-                required
-                className="form-input"
-              />
-            </div>
-
-            <div className="form-group">
               <label>Registered College Email</label>
               <input
                 type="email"
-                placeholder="e.g. student@kongu.edu"
+                placeholder="e.g. student@kongu.edu or staff@kongu.ac.in"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="form-input"
               />
             </div>
+
+            {!isStaff && (
+              <div className="form-group">
+                <label>Roll Number</label>
+                <input
+                  type="text"
+                  placeholder="e.g. 22IT011"
+                  value={rollNumber}
+                  onChange={(e) => setRollNumber(e.target.value)}
+                  required={!isStaff}
+                  className="form-input"
+                />
+              </div>
+            )}
 
             <button type="submit" disabled={loading} className="btn-auth-submit">
               {loading ? "Verifying..." : "Verify Identity →"}

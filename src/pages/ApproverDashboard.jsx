@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getPendingActivities, getAllActivities, reviewActivity } from "../api/points.js";
 import KecLogo from "../components/KecLogo.jsx";
 import CertificateModal from "../components/CertificateModal.jsx";
+import ChangePasswordModal from "../components/ChangePasswordModal.jsx";
 
 const CATEGORIES = [
   "1. Paper/Poster/Project Presentation",
@@ -37,6 +38,7 @@ export default function ApproverDashboard() {
   const [actionSuccess, setActionSuccess] = useState("");
 
   const [activeModalActivity, setActiveModalActivity] = useState(null);
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -196,6 +198,9 @@ export default function ApproverDashboard() {
             <span className="user-name">{user.name}</span>
             <span className="user-detail">{roleTitle} • Dept: {user.department}</span>
           </div>
+          <button className="btn-change-password" onClick={() => setShowChangePassword(true)}>
+            🔑 Change Password
+          </button>
           <button className="btn-logout" onClick={handleLogout}>
             Logout
           </button>
@@ -449,6 +454,13 @@ export default function ApproverDashboard() {
         <CertificateModal
           activity={activeModalActivity}
           onClose={() => setActiveModalActivity(null)}
+        />
+      )}
+
+      {/* Change Password Modal */}
+      {showChangePassword && (
+        <ChangePasswordModal
+          onClose={() => setShowChangePassword(false)}
         />
       )}
     </div>
