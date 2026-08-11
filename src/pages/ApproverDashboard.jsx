@@ -523,7 +523,6 @@ export default function ApproverDashboard() {
             </div>
           )}
         </section>
-      </main>
 
         </>)}
 
@@ -594,6 +593,8 @@ export default function ApproverDashboard() {
           </section>
         )}
       {/* Certificate Modal */}
+      </main>
+
       {activeModalActivity && (
         <CertificateModal
           activity={activeModalActivity}
