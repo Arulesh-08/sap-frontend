@@ -228,7 +228,7 @@ export default function ApproverDashboard() {
   if (!user) return null;
 
   const roleTitle =
-    user.role === "hod"
+    user.role === "hod" || user.role === "admin"
       ? "Head of Department (HOD)"
       : user.role === "advisor"
         ? "Class Advisor"
@@ -256,7 +256,7 @@ export default function ApproverDashboard() {
           <button className="btn-change-password" onClick={() => setShowChangePassword(true)}>
             🔑 Change Password
           </button>
-          {(user.role === "advisor" || user.role === "hod") && (
+          {(user.role === "advisor" || user.role === "hod" || user.role === "admin") && (
             <button
               className="btn-download-summary"
               onClick={handleDownloadExcel}
@@ -282,7 +282,7 @@ export default function ApproverDashboard() {
           >
             📋 Approval Queue
           </button>
-          {(user.role === "advisor" || user.role === "hod") && (
+          {(user.role === "advisor" || user.role === "hod" || user.role === "admin") && (
             <button
               className={`switch-btn ${mainTab === "summary" ? "active" : ""}`}
               onClick={() => { setMainTab("summary"); fetchSummary(); }}
