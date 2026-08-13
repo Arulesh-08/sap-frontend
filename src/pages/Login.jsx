@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import PasswordInput from "../components/PasswordInput";
 import { loginUser } from "../api/auth.js";
 import KecLogo from "../components/KecLogo.jsx";
 
@@ -62,14 +63,12 @@ export default function Login() {
                 Forgot Password?
               </Link>
             </div>
-            <input
-              type="password"
+            <PasswordInput
               name="password"
               placeholder="••••••••"
               value={form.password}
               onChange={handleChange}
               required
-              className="form-input"
             />
           </div>
 

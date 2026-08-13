@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 import { submitActivity, getMyPoints, getCategories } from "../api/points.js";
 import { downloadReport } from "../api/report.js";
 import KecLogo from "../components/KecLogo.jsx";
@@ -208,6 +209,7 @@ export default function Dashboard() {
           <button className="btn-change-password" onClick={() => setShowChangePassword(true)}>
             🔑 Change Password
           </button>
+          <ThemeToggle />
           <button className="btn-logout" onClick={handleLogout}>
             Logout
           </button>

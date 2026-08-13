@@ -139,12 +139,12 @@ body {
 .welcome-banner h2 {
   font-size: 1.6rem;
   font-weight: 800;
-  color: #FFFFFF;
+  color: var(--text-main);
   margin-bottom: 6px;
 }
 
 .welcome-banner p {
-  color: #CBD5E1;
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 
@@ -223,7 +223,7 @@ body {
 .stat-value {
   font-size: 1.75rem;
   font-weight: 800;
-  color: #FFFFFF;
+  color: var(--text-main);
   line-height: 1.2;
 }
 
@@ -262,7 +262,7 @@ body {
 .card-header h3 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #FFFFFF;
+  color: var(--text-main);
 }
 
 .card-subtitle {
@@ -288,7 +288,7 @@ body {
 .form-group label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: #CBD5E1;
+  color: var(--text-muted);
 }
 
 .form-input {
@@ -296,7 +296,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 8px;
   padding: 11px 14px;
-  color: #FFFFFF;
+  color: var(--text-main);
   font-size: 0.9rem;
   font-family: inherit;
   outline: none;
@@ -334,7 +334,7 @@ body {
 
 .file-hint {
   font-size: 0.82rem;
-  color: #94A3B8;
+  color: var(--text-muted);
   font-weight: 500;
 }
 
@@ -367,7 +367,7 @@ body {
 .tab-btn {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94A3B8;
+  color: var(--text-muted);
   padding: 7px 14px;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -378,7 +378,7 @@ body {
 }
 
 .tab-btn:hover {
-  color: #FFFFFF;
+  color: var(--text-main);
   background: rgba(255, 255, 255, 0.1);
 }
 
@@ -444,7 +444,7 @@ body {
 
 .title-cell {
   font-weight: 600;
-  color: #F8FAFC;
+  color: var(--text-main);
   max-width: 240px;
 }
 
@@ -508,7 +508,7 @@ body {
 
 .v-code {
   font-size: 0.68rem;
-  color: #94A3B8;
+  color: var(--text-muted);
   font-family: monospace;
 }
 
@@ -590,7 +590,7 @@ body {
 
 .switch-btn.active {
   background: var(--bg-card);
-  color: #FFFFFF;
+  color: var(--text-main);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -600,7 +600,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   padding: 6px 8px;
-  color: #FFFFFF;
+  color: var(--text-main);
   font-weight: 600;
   outline: none;
 }
@@ -611,7 +611,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   padding: 6px 8px;
-  color: #FFFFFF;
+  color: var(--text-main);
   font-size: 0.8rem;
   outline: none;
 }
@@ -693,7 +693,7 @@ body {
 }
 
 .modal-header h3 {
-  color: #FFFFFF;
+  color: var(--text-main);
   font-size: 1.1rem;
 }
 
@@ -706,7 +706,7 @@ body {
 .modal-close-btn {
   background: rgba(255, 255, 255, 0.1);
   border: none;
-  color: #FFFFFF;
+  color: var(--text-main);
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -815,7 +815,7 @@ body {
 .auth-title {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #FFFFFF;
+  color: var(--text-main);
 }
 
 .auth-subtitle {
@@ -1620,3 +1620,78 @@ img {
   color: #FFFFFF;
 }
 
+
+/* ================= LIGHT THEME ================= */
+[data-theme="light"] {
+  --bg-dark: #f4f6f8;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --primary-emerald: #1a7a4c;
+  --primary-emerald-hover: #145c39;
+  --kec-navy: #1a3c34;
+  --kec-gold: #b8860b;
+  --text-main: #1a2332;
+  --text-muted: #5a6472;
+  --accent-blue: #2563eb;
+  --accent-purple: #7c3aed;
+  --danger-red: #dc2626;
+  --warning-amber: #b8860b;
+}
+
+[data-theme="light"] body {
+  background-image:
+    radial-gradient(at 0% 0%, rgba(26, 122, 76, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(11, 25, 44, 0.05) 0px, transparent 50%);
+}
+
+[data-theme="light"] .portal-header {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .form-input,
+[data-theme="light"] .inline-number-input,
+[data-theme="light"] .inline-text-input {
+  background: #ffffff;
+  color: var(--text-main);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .custom-table td {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.theme-toggle-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: inherit;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+[data-theme="light"] .theme-toggle-btn {
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.password-field-wrapper {
+  position: relative;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--text-muted);
+  padding: 4px;
+}

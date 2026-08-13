@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 import { getPendingActivities, getAllActivities, reviewActivity, getStudentSummary, downloadAdvisorSummaryPdf } from "../api/points.js";
 import KecLogo from "../components/KecLogo.jsx";
 import CertificateModal from "../components/CertificateModal.jsx";
@@ -265,6 +266,7 @@ export default function ApproverDashboard() {
               📥 Download Summary Sheet
             </button>
           )}
+          <ThemeToggle />
           <button className="btn-logout" onClick={handleLogout}>
             Logout
           </button>
