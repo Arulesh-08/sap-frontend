@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../components/PasswordInput";
 import { registerUser } from "../api/auth.js";
 import KecLogo from "../components/KecLogo.jsx";
+import itParkBg from "../assets/it_park.webp";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ export default function Register() {
   };
 
   return (
-    <div className="auth-wrapper">
+    <div className="auth-wrapper" style={{ backgroundImage: `url(${itParkBg})` }}>
       <div className="auth-card-wrapper wide-auth">
         <div className="auth-header">
           <KecLogo size={56} />

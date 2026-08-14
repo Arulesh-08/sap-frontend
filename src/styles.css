@@ -786,6 +786,25 @@ body {
   align-items: center;
   justify-content: center;
   padding: 24px;
+  background-image: url('/src/assets/it_park.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.auth-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(7, 15, 30, 0.65);
+  backdrop-filter: blur(2px);
+  z-index: 0;
+}
+
+.auth-wrapper > * {
+  position: relative;
+  z-index: 1;
 }
 
 .auth-card-wrapper {
@@ -1694,4 +1713,62 @@ img {
   font-size: 15px;
   color: var(--text-muted);
   padding: 4px;
+}
+
+/* ================= LIGHT THEME CONTRAST FIXES ================= */
+[data-theme="light"] .stat-icon {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .tab-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .tab-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text-main);
+}
+
+[data-theme="light"] .tab-switcher {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .modal-close-btn {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--text-main);
+}
+
+[data-theme="light"] .pdf-fallback {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--text-main);
+}
+
+[data-theme="light"] .btn-change-password {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-main);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .btn-change-password:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .theme-toggle-btn {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-main);
+}
+
+[data-theme="light"] .modal-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .modal-content {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .modal-header {
+  background: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid var(--border-color);
 }

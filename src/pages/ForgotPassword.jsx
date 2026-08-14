@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { verifyReset, resetPassword } from "../api/auth.js";
 import KecLogo from "../components/KecLogo.jsx";
+import itParkBg from "../assets/it_park.webp";
 
 // Two-step flow:
 // Step 1 — student enters roll number + registered email; backend verifies they
@@ -71,7 +72,7 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="auth-wrapper">
+    <div className="auth-wrapper" style={{ backgroundImage: `url(${itParkBg})` }}>
       <div className="auth-card-wrapper">
         <div className="auth-header">
           <KecLogo size={56} />
