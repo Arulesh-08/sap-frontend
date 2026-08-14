@@ -1,7 +1,8 @@
+import { getItem } from "../utils/storage.js";
 const BASE_URL = "https://sap-backend-1.onrender.com/api";
 
 function authHeaders() {
-  const token = localStorage.getItem("token");
+  const token = getItem("token");
   return { Authorization: `Bearer ${token}` };
 }
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getItem, setItem, removeItem, storageAvailable } from "../utils/storage.js";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../components/PasswordInput";
 import { registerUser } from "../api/auth.js";

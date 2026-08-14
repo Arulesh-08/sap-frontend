@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getItem, setItem, removeItem, storageAvailable } from "../utils/storage.js";
 import { Link, useNavigate } from "react-router-dom";
 import PasswordInput from "../components/PasswordInput";
 import { loginUser } from "../api/auth.js";
@@ -21,8 +22,8 @@ export default function Login() {
     setLoading(true);
     try {
       const result = await loginUser(form);
-      localStorage.setItem("token", result.token);
-      localStorage.setItem("user", JSON.stringify(result.user));
+      setItem("token", result.token);
+      setItem("user", JSON.stringify(result.user));
 
       navigate(result.user.role === "student" ? "/dashboard" : "/approver");
     } catch (err) {
@@ -33,6 +34,16 @@ export default function Login() {
   };
 
   return (
+    <>
+    {!storageAvailable && (
+      <div style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999,
+        background: "#b91c1c", color: "#fff", textAlign: "center",
+        padding: "10px 16px", fontSize: "0.85rem", fontWeight: 600
+      }}>
+        ⚠️ Your browser is blocking storage access. Please disable Private/Incognito mode or allow storage for this site to use the portal.
+      </div>
+    )}
     <div className="auth-wrapper" style={{ backgroundImage: `url(${itParkBg})` }}>
       <div className="auth-card-wrapper">
         <div className="auth-header">

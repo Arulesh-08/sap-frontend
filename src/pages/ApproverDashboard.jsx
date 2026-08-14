@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getItem, setItem, removeItem, storageAvailable } from "../utils/storage.js";
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import { getPendingActivities, getAllActivities, reviewActivity, getStudentSummary, downloadAdvisorSummaryPdf } from "../api/points.js";
@@ -48,8 +49,8 @@ export default function ApproverDashboard() {
   const [pdfDownloading, setPdfDownloading] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const storedUser = getItem("user");
+    const token = getItem("token");
 
     if (!token || !storedUser) {
       navigate("/login");
@@ -91,7 +92,7 @@ export default function ApproverDashboard() {
 
   const fetchAnalytics = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = getItem("token");
       const res = await fetch("https://sap-backend-1.onrender.com/api/points/analytics", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -201,7 +202,7 @@ export default function ApproverDashboard() {
     if (!confirmed) return;
 
     try {
-      const token = localStorage.getItem("token");
+      const token = getItem("token");
       const res = await fetch(
         `https://sap-backend-1.onrender.com/api/points/${item.studentId}/activity/${item.activityId}/revoke`,
         {
@@ -221,8 +222,8 @@ export default function ApproverDashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    removeItem("token");
+    removeItem("user");
     navigate("/login");
   };
 

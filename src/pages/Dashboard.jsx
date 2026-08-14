@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getItem, setItem, removeItem, storageAvailable } from "../utils/storage.js";
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import { submitActivity, getMyPoints, getCategories } from "../api/points.js";
@@ -47,8 +48,8 @@ export default function Dashboard() {
   const [showChangePassword, setShowChangePassword] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    const storedUser = getItem("user");
+    const token = getItem("token");
 
     if (!token || !storedUser) {
       navigate("/login");
@@ -161,8 +162,8 @@ export default function Dashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    removeItem("token");
+    removeItem("user");
     navigate("/login");
   };
 

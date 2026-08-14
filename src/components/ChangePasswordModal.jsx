@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getItem, setItem, removeItem, storageAvailable } from "../utils/storage.js";
 import { changePassword } from "../api/auth.js";
 
 export default function ChangePasswordModal({ onClose }) {
@@ -28,7 +29,7 @@ export default function ChangePasswordModal({ onClose }) {
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = getItem("token");
       await changePassword({
         currentPassword: form.currentPassword,
         newPassword: form.newPassword,

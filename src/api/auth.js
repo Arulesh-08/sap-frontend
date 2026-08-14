@@ -1,3 +1,4 @@
+import { getItem } from "../utils/storage.js";
 const BASE_URL = "https://sap-backend-1.onrender.com/api";
 
 export async function registerUser(data) {
