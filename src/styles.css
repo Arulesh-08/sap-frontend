@@ -1233,7 +1233,7 @@ img {
   input,
   select,
   textarea,
-  button {
+  button:not(.password-toggle-btn) {
     width: 100% !important;
   }
 }
@@ -1322,7 +1322,7 @@ img {
     font-size:15px;
   }
 
-  button{
+  button:not(.password-toggle-btn){
     height:44px;
     font-size:15px;
   }
@@ -1700,19 +1700,30 @@ img {
 
 .password-field-wrapper {
   position: relative;
+  width: 100%;
 }
 
 .password-toggle-btn {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 15px;
-  color: var(--text-muted);
-  padding: 4px;
+  position: absolute !important;
+  right: 10px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  color: var(--text-muted) !important;
+  padding: 4px !important;
+  width: auto !important;
+  height: auto !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  max-width: unset !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 2 !important;
+  line-height: 1 !important;
 }
 
 /* ================= LIGHT THEME CONTRAST FIXES ================= */
