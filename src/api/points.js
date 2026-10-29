@@ -1,0 +1,102 @@
+import { getItem } from "../utils/storage.js";
+import BASE_URL from "./config.js";
+import { triggerFileDownload } from "./report.js";
+
+
+function authHeaders() {
+  const token = getItem("token");
+  return { Authorization: `Bearer ${token}` };
+}
+
+// Category -> Type -> Tier -> points, straight from the backend's pointStructure.js.
+// This is the single source of truth for the cascading dropdown UI, so the frontend
+// can never drift out of sync with what the server will actually accept/compute.
+export async function getCategories() {
+  const res = await fetch(`${BASE_URL}/points/categories`, {
+    headers: authHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Failed to load categories");
+  return result;
+}
+
+export async function submitActivity(formData) {
+  const res = await fetch(`${BASE_URL}/points/submit`, {
+    method: "POST",
+    headers: authHeaders(), // don't set Content-Type manually — browser sets it for FormData
+    body: formData,
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Submission failed");
+  return result;
+}
+
+export async function getMyPoints() {
+  const res = await fetch(`${BASE_URL}/points/my-points`, {
+    headers: authHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Failed to load points");
+  return result;
+}
+
+export async function getPendingActivities() {
+  const res = await fetch(`${BASE_URL}/points/pending`, {
+    headers: authHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Failed to load pending activities");
+  return result;
+}
+
+export async function getAllActivities() {
+  const res = await fetch(`${BASE_URL}/points/all`, {
+    headers: authHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Failed to load all activities");
+  return result;
+}
+
+export async function getStudentSummary(year = "", section = "") {
+  const query = new URLSearchParams();
+  if (year) query.append("year", year);
+  if (section) query.append("section", section);
+  const qStr = query.toString() ? `?${query.toString()}` : "";
+
+  const res = await fetch(`${BASE_URL}/points/student-summary${qStr}`, {
+    headers: authHeaders(),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Failed to load student summary");
+  return result;
+}
+
+export async function downloadAdvisorSummaryPdf(year = "", section = "") {
+  const query = new URLSearchParams();
+  if (year) query.append("year", year);
+  if (section) query.append("section", section);
+  const qStr = query.toString() ? `?${query.toString()}` : "";
+
+  const res = await fetch(`${BASE_URL}/report/summary/advisor${qStr}`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || "PDF download failed");
+  }
+  const blob = await res.blob();
+  const filename = `SAP_Advisor_Summary_${Date.now()}.pdf`;
+  triggerFileDownload(blob, filename, "application/pdf");
+}
+
+export async function reviewActivity(studentId, activityId, payload) {
+  const res = await fetch(`${BASE_URL}/points/${studentId}/activity/${activityId}`, {
+    method: "PATCH",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const result = await res.json();
+  if (!res.ok) throw new Error(result.message || "Review failed");
+  return result;
+}
