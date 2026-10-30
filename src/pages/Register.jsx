@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { getItem, setItem, removeItem, storageAvailable } from "../utils/storage.js";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import PasswordInput from "../components/PasswordInput";
 import { registerUser } from "../api/auth.js";
 import KecLogo from "../components/KecLogo.jsx";
@@ -27,17 +27,34 @@ function getPasswordStrength(password) {
 
 export default function Register() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const prefillEmail = searchParams.get("email") || "";
+  const prefillName = searchParams.get("name") || "";
+
+  const rollFromEmail = prefillEmail.match(/\b(\d{2}[a-z]{2,4}\d{3})\b/i)?.[1]?.toUpperCase() || "";
+
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    name: prefillName,
+    email: prefillEmail,
     password: "",
     role: "student",
-    rollNumber: "",
+    rollNumber: rollFromEmail,
     department: "Information Technology",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (prefillEmail && !form.email) {
+      setForm((prev) => ({
+        ...prev,
+        email: prefillEmail,
+        name: prev.name || prefillName,
+        rollNumber: prev.rollNumber || rollFromEmail,
+      }));
+    }
+  }, [prefillEmail, prefillName, rollFromEmail]);
 
   const strength = useMemo(() => getPasswordStrength(form.password), [form.password]);
 
@@ -82,6 +99,14 @@ export default function Register() {
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit}>
+          {prefillEmail && (
+            <div className="alert alert-info" style={{ display: "flex", alignItems: "center", gap: "10px", background: "rgba(59, 130, 246, 0.15)", border: "1px solid rgba(59, 130, 246, 0.35)", color: "#93c5fd" }}>
+              <span>🔐</span>
+              <span>
+                Google account <strong>{prefillEmail}</strong> is not registered yet. Please complete your registration details below to create your portal account.
+              </span>
+            </div>
+          )}
           {error && <div className="alert alert-error">{error}</div>}
           {success && <div className="alert alert-success">{success}</div>}
 

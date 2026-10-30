@@ -47,14 +47,23 @@ export default function Login() {
     }
   };
 
-  const handleGoogleSuccess = async (credential) => {
+  const handleGoogleSuccess = async (data) => {
     setError("");
     setGoogleLoading(true);
     try {
-      const result = await loginWithGoogle(credential);
+      const result = await loginWithGoogle(data);
       handleLoginSuccess(result);
     } catch (err) {
-      setError(err.message);
+      if (err.notRegistered) {
+        setError(`⚠️ ${err.message || "Account not registered yet. Redirecting to sign up..."}`);
+        setTimeout(() => {
+          navigate(
+            `/register?email=${encodeURIComponent(err.email || "")}&name=${encodeURIComponent(err.name || "")}`
+          );
+        }, 1500);
+      } else {
+        setError(err.message);
+      }
     } finally {
       setGoogleLoading(false);
     }

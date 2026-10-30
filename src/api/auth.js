@@ -60,14 +60,21 @@ export async function loginUser(data) {
   return result;
 }
 
-export async function loginWithGoogle(credential) {
+export async function loginWithGoogle(data) {
+  const payload = typeof data === "string" ? { credential: data } : data;
   const res = await fetch(`${BASE_URL}/auth/google`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ credential }),
+    body: JSON.stringify(payload),
   });
   const result = await res.json();
-  if (!res.ok) throw new Error(result.message || "Google authentication failed");
+  if (!res.ok) {
+    const error = new Error(result.message || "Google authentication failed");
+    error.notRegistered = Boolean(result.notRegistered);
+    error.email = result.email;
+    error.name = result.name;
+    throw error;
+  }
   return result;
 }
 
