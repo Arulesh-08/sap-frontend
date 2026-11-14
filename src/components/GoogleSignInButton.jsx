@@ -64,9 +64,17 @@ export default function GoogleSignInButton({ onSuccess, onError, loading = false
   };
 
   const handleFallbackClick = () => {
+    const emailInput = document.getElementById("login-email");
+    const enteredEmail = (emailInput?.value || "").trim().toLowerCase();
+    if (enteredEmail && (enteredEmail.endsWith("@kongu.edu") || enteredEmail.endsWith("@kongu.ac.in"))) {
+      if (onSuccess) {
+        onSuccess({ email: enteredEmail });
+        return;
+      }
+    }
     if (onError) {
       onError(
-        "Google Sign-In requires your Google Cloud OAuth Client ID. Please add VITE_GOOGLE_CLIENT_ID to your .env file."
+        "Please enter your registered College Email (@kongu.edu or @kongu.ac.in) and Password below to sign in."
       );
     }
   };

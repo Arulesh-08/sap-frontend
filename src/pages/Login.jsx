@@ -38,7 +38,11 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const result = await loginUser(form);
+      const cleanForm = {
+        email: (form.email || "").trim().toLowerCase(),
+        password: form.password || "",
+      };
+      const result = await loginUser(cleanForm);
       handleLoginSuccess(result);
     } catch (err) {
       setError(err.message);
